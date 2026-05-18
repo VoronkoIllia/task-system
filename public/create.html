@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Task</title>
+  </head>
+  <body>
+    <h1>Create Task</h1>
+    <form id="createTaskForm">
+      <label for="title">Task Title:</label>
+      <input type="text" name="title" placeholder="Task Title" required /><br />
+      <label for="description">Task Description:</label>
+      <textarea name="description" placeholder="Task Description"></textarea
+      ><br />
+      <label for="dueDate">Due Date:</label>
+      <input type="date" name="dueDate" placeholder="Due Date" /><br />
+      <label for="status">Status:</label>
+      <select name="status" id="status">
+        <option value="pending">Pending</option>
+        <option value="in progress">In Progress</option>
+        <option value="completed">Completed</option></select
+      ><br />
+      <label for="priority">Priority:</label>
+      <select name="priority" id="priority">
+        <option value="low">Low</option>
+        <option value="medium">Medium</option>
+        <option value="high">High</option></select
+      ><br />
+      <button type="submit">Create Task</button>
+    </form>
+    <script>
+      const token = localStorage.getItem("token");
+      if (!token) {
+        window.location.href = "login.html";
+      }
+
+      const createTaskForm = document.getElementById("createTaskForm");
+
+      createTaskForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(createTaskForm);
+        const data = Object.fromEntries(formData.entries());
+
+        const token = localStorage.getItem("token");
+        const tokenPayload = JSON.parse(atob(token.split(".")[1]));
+        data.userId = tokenPayload.id;
+
+        try {
+          const token = localStorage.getItem("token");
+          const response = await fetch("/api/tasks", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(data),
+          });
+
+          if (response.ok) {
+            alert("Task created successfully!");
+            createTaskForm.reset();
+          } else {
+            const errorData = await response.json();
+            alert(`Error: ${errorData.message}`);
+          }
+        } catch (error) {
+          alert(`Error: ${error.message}`);
+        }
+      });
+    </script>
+  </body>
+</html>

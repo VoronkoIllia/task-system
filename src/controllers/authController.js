@@ -4,10 +4,10 @@ const authController = {
   async register(req, res) {
     const { name, email, password } = req.body;
 
-    await authService.register(name, email, password);
+    const token = await authService.register(name, email, password);
     res
       .status(201)
-      .json({ success: true, message: "User registered successfully" });
+      .json({ success: true, token, message: "User registered successfully" });
   },
 
   async login(req, res, next) {

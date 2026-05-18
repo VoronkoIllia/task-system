@@ -25,6 +25,10 @@ const authService = {
     const user = new User({ name, email, password });
 
     await user.save();
+
+    const token = generateToken(user._id, user.role);
+
+    return token;
   },
 
   async login(email, password) {

@@ -1,4 +1,5 @@
 const Task = require("../models/Task");
+const User = require("../models/User");
 const ApiError = require("../errors/ApiError");
 
 const taskService = {
@@ -12,6 +13,11 @@ const taskService = {
   ) {
     if (!title || !description) {
       throw ApiError.badRequest("Title and description are required");
+    }
+
+    const user = await User.findById(createdBy);
+    if (!user) {
+      throw ApiError.notFound("User not found");
     }
 
     const task = new Task({

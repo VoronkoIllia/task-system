@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Tasks</title>
+  </head>
+  <body>
+    <h1>My Tasks</h1>
+    <a href="register.html">Register</a>
+    <a href="login.html">Login</a>
+    <a href="create.html">Create New Task</a>
+    <button id="logoutBtn">Logout</button>
+    <div id="tasksContainer"></div>
+    <script>
+      const logoutBtn = document.getElementById("logoutBtn");
+      const tasksContainer = document.getElementById("tasksContainer");
+
+      logoutBtn.addEventListener("click", () => {
+        localStorage.removeItem("token");
+        window.location.href = "login.html";
+      });
+
+      async function fetchTasks() {
+        try {
+          const response = await fetch("/api/tasks");
+
+          if (response.ok) {
+            const result = await response.json();
+            displayTasks(result.data);
+          } else {
+            const errorData = await response.json();
+            alert(`Error: ${errorData.message}`);
+          }
+        } catch (error) {
+          alert(`Error: ${error.message}`);
+        }
+      }
+
+      function displayTasks(tasks) {
+        tasksContainer.innerHTML = "";
+        tasks.forEach((task) => {
+          const taskDiv = document.createElement("div");
+          taskDiv.innerHTML = `
+            <h3>${task.title}</h3>
+            <p>${task.description}</p>
+            <p>Status: ${task.status}</p>
+            <p>Priority: ${task.priority}</p>
+            <p>Due Date: ${new Date(task.dueDate).toLocaleDateString()}</p>
+          `;
+          tasksContainer.appendChild(taskDiv);
+        });
+      }
+
+      fetchTasks();
+    </script>
+  </body>
+</html>

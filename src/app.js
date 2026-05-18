@@ -8,9 +8,10 @@ const errorHandler = require("./middlewares/error-handling/errorHandler");
 const ApiError = require("./errors/ApiError");
 
 app.use(express.json());
+app.use(express.static("public"));
 app.use("/api/auth", authRouter);
 app.use("/api/tasks", taskRouter);
-app.use((res, req, next) => {
+app.use((req, res, next) => {
   next(ApiError.notFound("Page not found"));
 });
 app.use(errorHandler);
