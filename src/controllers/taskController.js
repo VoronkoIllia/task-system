@@ -1,39 +1,38 @@
-const Task = require("../models/Task");
-const ApiError = require("../errors/ApiError");
+const taskService = require("../services/taskService");
 
 const taskController = {
   async createTask(req, res, next) {
-    const task = new Task({ ...req.body, createdBy: req.user.id });
-    await task.save();
+    const { title, description, dueDate, status, priority } = req.body;
+
+    const task = await taskService.createTask(
+      title,
+      description,
+      dueDate,
+      req.user._id,
+      status,
+      priority,
+    );
     res.status(201).json(task);
   },
   async getTasks(req, res, next) {
-    const tasks = await Task.find();
+    const tasks = await taskService.getAllTasks();
     res.json(tasks);
   },
   async getTaskById(req, res, next) {
-    const task = await Task.findById(req.params.id);
-    if (!task) {
-      return next(ApiError.notFound("Task not found"));
-    }
+    const task = await taskService.getTaskById(req.params.id);
     res.json(task);
   },
   async updateTask(req, res, next) {
-    const updatedTask = await Task.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
-    if (!updatedTask) {
-      return next(ApiError.notFound("Task not found"));
-    }
+    const updatedTask = await taskService.updateTask(
+      req.params.id,
+      req.body,
+      req.user._id,
+    );
     res.json(updatedTask);
   },
   async deleteTask(req, res, next) {
-    const deletedTask = await Task.findByIdAndDelete(req.params.id);
-    if (!deletedTask) {
-      return next(ApiError.notFound("Task not found"));
-    }
-    res.status(204).send();
+    const deletedTask = await taskService.deleteTask(req.params.id);
+    res.status(204).json(deletedTask);
   },
 };
 

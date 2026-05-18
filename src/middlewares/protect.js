@@ -26,6 +26,11 @@ const protect = async (req, res, next) => {
     }
     next();
   } catch (error) {
+    if (error.name === "TokenExpiredError") {
+      return next(
+        ApiError.badRequest("Your session has expired. Please log in again"),
+      );
+    }
     return next(ApiError.badRequest("Not authorized to access this route"));
   }
 };
