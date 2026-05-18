@@ -3,8 +3,16 @@ const express = require("express");
 const app = express();
 
 const authRouter = require("./routers/authRouter");
+const taskRouter = require("./routers/taskRouter");
+const errorHandler = require("./middlewares/error-handling/errorHandler");
+const ApiError = require("./errors/ApiError");
 
 app.use(express.json());
 app.use("/api/auth", authRouter);
+app.use("/api/tasks", taskRouter);
+app.use((res, req, next) => {
+  next(ApiError.notFound("Page not found"));
+});
+app.use(errorHandler);
 
 module.exports = app;

@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const ApiError = require("../errors/ApiError");
 const { JWT_SECRET } = require("../config/env");
 
 const protect = async (req, res, next) => {
@@ -21,18 +22,11 @@ const protect = async (req, res, next) => {
 
     req.user = await User.findById(decoded.id).select("-password");
     if (!req.user) {
-      return res.status(401).json({
-        success: false,
-        message: "User not found",
-      });
+      return next(ApiError.badRequest("User not found"));
     }
-
     next();
   } catch (error) {
-    return res.status(401).json({
-      success: false,
-      message: "Not authorized to access this route",
-    });
+    return next(ApiError.badRequest("Not authorized to access this route"));
   }
 };
 

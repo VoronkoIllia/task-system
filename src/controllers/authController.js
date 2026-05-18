@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const { generateToken } = require("../utils/jwt");
+const ApiError = require("../errors/ApiError");
 
 const authController = {
   async register(req, res) {
@@ -47,13 +48,11 @@ const authController = {
     }
   },
 
-  async login(req, res) {
+  async login(req, res, next) {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Email and password are required" });
+      return next(ApiError.badRequest("Email and password are required"));
     }
     try {
       // Find user by email
@@ -61,17 +60,13 @@ const authController = {
 
       // Check if user exists and password matches
       if (!user) {
-        return res
-          .status(400)
-          .json({ success: false, message: "Invalid email or password" });
+        return next(ApiError.badRequest("Invalid email or password"));
       }
 
       // Compare provided password with hashed password in database
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) {
-        return res
-          .status(400)
-          .json({ success: false, message: "Invalid email or password" });
+        return next(ApiError.badRequest("Invalid email or password"));
       }
 
       // Generate JWT token
