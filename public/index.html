@@ -16,14 +16,36 @@
       const logoutBtn = document.getElementById("logoutBtn");
       const tasksContainer = document.getElementById("tasksContainer");
 
-      logoutBtn.addEventListener("click", () => {
-        localStorage.removeItem("token");
-        window.location.href = "login.html";
+      logoutBtn.addEventListener("click", async () => {
+        try {
+          const response = await fetch(
+            "http://localhost:4000/api/auth/logout",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              credentials: "include",
+            },
+          );
+
+          if (response.ok) {
+            alert("Logout successful!");
+            window.location.href = "login.html";
+          } else {
+            const errorData = await response.json();
+            alert(`Error: ${errorData.message}`);
+          }
+        } catch (error) {
+          alert(`Error: ${error.message}`);
+        }
       });
 
       async function fetchTasks() {
         try {
-          const response = await fetch("/api/tasks");
+          const response = await fetch("http://localhost:4000/api/tasks", {
+            credentials: "include",
+          });
 
           if (response.ok) {
             const result = await response.json();

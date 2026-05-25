@@ -43,17 +43,12 @@
         const formData = new FormData(createTaskForm);
         const data = Object.fromEntries(formData.entries());
 
-        const token = localStorage.getItem("token");
-        const tokenPayload = JSON.parse(atob(token.split(".")[1]));
-        data.userId = tokenPayload.id;
-
         try {
-          const token = localStorage.getItem("token");
-          const response = await fetch("/api/tasks", {
+          const response = await fetch("http://localhost:4000/api/tasks", {
             method: "POST",
+            credentials: "include",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify(data),
           });

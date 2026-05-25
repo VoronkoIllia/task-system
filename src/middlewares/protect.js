@@ -4,19 +4,18 @@ const ApiError = require("../errors/ApiError");
 const { JWT_SECRET } = require("../config/env");
 
 const protect = async (req, res, next) => {
-  const authHeader = req.headers.authorization;
+  let token = req.cookies.token;
 
-  // Check for Bearer token in Authorization header
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res.status(401).json({
-      success: false,
-      message: "Not authorized to access this route",
-    });
+  if (!token) {
+    const authHeader = req.headers.authorization;
+    // Check for Bearer token in Authorization header
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      throw new ApiError(401, "Not authorized to access this route");
+    }
+    token = authHeader.split(" ")[1];
   }
 
   try {
-    const token = authHeader.split(" ")[1];
-
     // Verify token and get user from payload
     const decoded = jwt.verify(token, JWT_SECRET);
 

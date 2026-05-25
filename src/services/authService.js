@@ -4,7 +4,7 @@ const { generateToken } = require("../utils/jwt");
 const ApiError = require("../errors/ApiError");
 
 const authService = {
-  async register(name, email, password) {
+  async registerUser(name, email, password) {
     if (!name || !email || !password) {
       throw ApiError.badRequest("Name, email, and password are required");
     }
@@ -26,12 +26,10 @@ const authService = {
 
     await user.save();
 
-    const token = generateToken(user._id, user.role);
-
-    return token;
+    return user;
   },
 
-  async login(email, password) {
+  async loginUser(email, password) {
     if (!email || !password) {
       throw ApiError.badRequest("Email and password are required");
     }
@@ -46,9 +44,7 @@ const authService = {
       throw ApiError.badRequest("Invalid email or password");
     }
 
-    const token = generateToken(user._id, user.role);
-
-    return token;
+    return user;
   },
 
   getUserById(id) {
