@@ -3,66 +3,32 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style/registerStyle.css" />
     <title>Реєстрація</title>
   </head>
   <body>
     <a href="index.html">Back to Home</a>
     <h1>Register</h1>
-    <form id="registerForm">
-      <input type="text" name="name" placeholder="Username" required /><br />
-      <input type="email" name="email" placeholder="Email" required /><br />
-      <input
-        type="password"
-        name="password"
-        placeholder="Password"
-        required
-      /><br />
+    <form id="registerForm" novalidate>
+      <input type="text" name="name" placeholder="Username" required />
+      <div class="error-message"></div>
+
+      <input type="email" name="email" placeholder="Email" required />
+      <div class="error-message"></div>
+
+      <input type="password" name="password" placeholder="Password" required />
+      <div class="error-message"></div>
+
       <input
         type="password"
         name="confirmPassword"
         placeholder="Confirm Password"
         required
-      /><br />
+      />
+      <div class="error-message"></div>
+      <br />
       <button type="submit">Register</button>
     </form>
-    <script>
-      const registerForm = document.getElementById("registerForm");
-
-      registerForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        const formData = new FormData(registerForm);
-        const data = Object.fromEntries(formData.entries());
-
-        if (data.password !== data.confirmPassword) {
-          alert("Passwords do not match!");
-          return;
-        }
-
-        try {
-          const response = await fetch(
-            "http://localhost:4000/api/auth/register",
-            {
-              method: "POST",
-              credentials: "include",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(data),
-            },
-          );
-
-          if (response.ok) {
-            alert("Registration successful!");
-            registerForm.reset();
-          } else {
-            const errorData = await response.json();
-            alert(`Error: ${errorData.message}`);
-          }
-        } catch (error) {
-          alert(`Error: ${error.message}`);
-        }
-      });
-    </script>
+    <script type="module" src="js/register.js"></script>
   </body>
 </html>

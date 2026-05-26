@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style/taskPageStyle.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <header>
+      <h1>Task Page</h1>
+      <a href="index.html">To main page</a>
+    </header>
+    <main>
+      <section id="task">
+        <h1 id="taskTitle">Task Title</h1>
+        <p id="taskDescription">
+          This is where the task details will be displayed.
+        </p>
+        <p>Author: <span id="taskAuthor">Author Name</span></p>
+        <p>Due Date: <span id="taskDueDate">Due Date</span></p>
+        <p>Status: <span id="taskStatus">Status</span></p>
+        <p>Priority: <span id="taskPriority">Priority</span></p>
+      </section>
+      <section id="comments">
+        <div id="comment-form">
+          <h2>Add a Comment</h2>
+          <form id="addCommentForm">
+            <input
+              class="comment-input"
+              name="content"
+              placeholder="Write your comment here..."
+              required
+            />
+            <div class="error-message"></div>
+            <br />
+            <button type="submit">Submit Comment</button>
+          </form>
+        </div>
+        <h2>Comments</h2>
+        <div id="comments-list">
+          <!-- Comments will be dynamically added here -->
+        </div>
+      </section>
+    </main>
+    <script type="module" src="js/taskScript.js"></script>
+  </body>
+</html>

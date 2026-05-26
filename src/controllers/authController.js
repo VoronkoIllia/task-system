@@ -41,13 +41,15 @@ const authController = {
     res.cookie("token", token, cookieOptions); // зберігаємо токен в cookie
     res.status(200).json({
       success: true,
-      token,
       message: "Login successful",
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
+      data: {
+        token,
+        user: {
+          id: user._id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+        },
       },
     });
   },

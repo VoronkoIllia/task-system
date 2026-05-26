@@ -15,7 +15,7 @@ const commentController = {
 
     res.status(201).json({
       success: true,
-      comment,
+      data: comment,
       message: "Comment created successfully",
     });
   },
@@ -25,7 +25,7 @@ const commentController = {
     const comments = await commentService.getCommentsByTaskId(taskId);
     res.json({
       success: true,
-      comments,
+      data: comments,
     });
   },
 
@@ -34,7 +34,7 @@ const commentController = {
     const comment = await commentService.deleteComment(commentId, req.user);
     res.json({
       success: true,
-      comment,
+      data: comment,
       message: "Comment deleted successfully",
     });
   },

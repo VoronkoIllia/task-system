@@ -69,6 +69,7 @@
             <p>Status: ${task.status}</p>
             <p>Priority: ${task.priority}</p>
             <p>Due Date: ${new Date(task.dueDate).toLocaleDateString()}</p>
+            <a href="task.html?taskId=${task._id}">View Details</a>
           `;
           tasksContainer.appendChild(taskDiv);
         });

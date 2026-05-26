@@ -20,7 +20,6 @@ app.use(
 app.use(cookieParser()); // парсинг cookie для доступа к токену в cookie
 
 app.use(express.json());
-// app.use(express.static("public"));
 app.use("/api/auth", authRouter);
 app.use("/api/tasks", taskRouter);
 app.use((req, res, next) => {
