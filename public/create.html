@@ -29,41 +29,6 @@
       ><br />
       <button type="submit">Create Task</button>
     </form>
-    <script>
-      const token = localStorage.getItem("token");
-      if (!token) {
-        window.location.href = "login.html";
-      }
-
-      const createTaskForm = document.getElementById("createTaskForm");
-
-      createTaskForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        const formData = new FormData(createTaskForm);
-        const data = Object.fromEntries(formData.entries());
-
-        try {
-          const response = await fetch("http://localhost:4000/api/tasks", {
-            method: "POST",
-            credentials: "include",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-          });
-
-          if (response.ok) {
-            alert("Task created successfully!");
-            createTaskForm.reset();
-          } else {
-            const errorData = await response.json();
-            alert(`Error: ${errorData.message}`);
-          }
-        } catch (error) {
-          alert(`Error: ${error.message}`);
-        }
-      });
-    </script>
+    <script type="module" src="js/createTask.js"></script>
   </body>
 </html>
