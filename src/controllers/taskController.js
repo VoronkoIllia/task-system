@@ -23,9 +23,11 @@ const taskController = {
     res.json({ success: true, data: task });
   },
   async updateTask(req, res, next) {
+    const { title, description, dueDate, status, priority } = req.body;
+
     const updatedTask = await taskService.updateTask(
       req.params.id,
-      req.body,
+      { title, description, dueDate, status, priority },
       req.user._id,
     );
     res.json({ success: true, data: updatedTask });

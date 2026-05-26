@@ -37,10 +37,6 @@ const authController = {
     const user = await authService.loginUser(email, password);
 
     const token = generateToken(user._id, user.role);
-    console.log("User ID:", user._id); // Додайте цей рядок для перевірки ID користувача
-    console.log("User Role:", user.role); // Додайте цей рядок для перевірки ролі користувача
-
-    console.log("Generated token:", token); // Додайте цей рядок для перевірки генерації токена
 
     res.cookie("token", token, cookieOptions); // зберігаємо токен в cookie
     res.status(200).json({
