@@ -28,7 +28,7 @@ const taskController = {
     const updatedTask = await taskService.updateTask(
       req.params.id,
       { title, description, dueDate, status, priority },
-      req.user._id,
+      req.user,
     );
     res.json({ success: true, data: updatedTask });
   },

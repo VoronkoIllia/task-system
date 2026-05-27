@@ -2,6 +2,8 @@ const Task = require("../models/Task");
 const User = require("../models/User");
 const ApiError = require("../errors/ApiError");
 
+const ROLES = require("../utils/roles");
+
 const taskService = {
   async createTask(
     title,
@@ -46,13 +48,13 @@ const taskService = {
     return task;
   },
 
-  async updateTask(id, updates, userId) {
+  async updateTask(id, updates, user) {
     const task = await Task.findById(id);
     if (!task) {
       throw ApiError.notFound("Task not found");
     }
 
-    if (task.createdBy.toString() !== userId) {
+    if (task.createdBy.toString() !== user._id && user.role !== ROLES.ADMIN) {
       throw new ApiError(403, "You don't have permission to update this task");
     }
     const updatedTask = await Task.findByIdAndUpdate(id, updates, {
